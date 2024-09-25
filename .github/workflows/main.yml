@@ -1,0 +1,77 @@
+name: Deploy to Ubuntu Server with SSH Key
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: CONST  # 사용할 환경을 'CONST'로 지정
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Install sshpass
+      run: sudo apt-get install sshpass
+
+    - name: Stop running Java application (if any)
+      run: |
+        sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          # 8080 포트를 사용 중인 프로세스 확인 및 종료
+          PID=$(lsof -t -i:8080)
+          if [ ! -z "$PID" ]; then
+            echo "Killing process using port 8080 with PID: $PID"
+            kill -9 $PID
+          else
+            echo "No process is using port 8080."
+          fi
+        EOF
+
+    - name: Copy files to server using SSH and Password
+      run: |
+        sshpass -p "${{ secrets.SSH_PASSWORD }}" rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.TARGET_DIRECTORY_PLAYGROUND }}
+
+    - name: Build and run the application on server
+      id: build_and_run
+      run: |
+        sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          cd ${{ secrets.TARGET_DIRECTORY_PLAYGROUND }}
+          # 빌드 로그와 실행 로그를 콘솔과 파일에 동시에 출력
+          ./gradlew build | tee build_output.log
+          nohup ./gradlew bootRun | tee app.log &
+        EOF
+      continue-on-error: true # 빌드 중 오류가 나더라도 중단하지 않음
+
+    # 실행 로그에서 오류가 있는지 확인 (app.log)
+    - name: Monitor application log for errors
+      run: |
+        sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          # app.log 파일에서 'ERROR' 문자열 검색
+          if grep -i "ERROR" ${{ secrets.TARGET_DIRECTORY_PLAYGROUND }}/app.log; then
+            echo "Application run failed. Errors found in app.log"
+            exit 1
+          else
+            echo "Application running successfully. No errors in app.log"
+          fi
+        EOF
+      continue-on-error: false # 실행 중 오류 발생 시 실패 처리
+
+    # 빌드 또는 실행 실패 시 알림 스크립트 실행
+    - name: Send notification if build or run fails
+      if: failure() || steps.build_and_run.conclusion == 'failure' # 빌드 또는 실행 실패 시 실행
+      run: |
+        echo "Fetching logs from server..."
+        sshpass -p "${{ secrets.SSH_PASSWORD }}" scp -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.TARGET_DIRECTORY_PLAYGROUND }}/build_output.log .
+        sshpass -p "${{ secrets.SSH_PASSWORD }}" scp -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.TARGET_DIRECTORY_PLAYGROUND }}/app.log .
+        python3 Exception.py build_output.log failure
+        python3 Exception.py app.log failure
+
+    # 빌드 및 실행 성공 시 알림 스크립트 실행
+    - name: Send notification if build and run succeed
+      if: success()  # 빌드 및 실행 성공한 경우에만 실행
+      run: |
+        echo "Build and application run successful!" > success_message.log
+        python3 Exception.py success_message.log success
