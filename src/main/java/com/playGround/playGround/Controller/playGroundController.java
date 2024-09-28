@@ -12,6 +12,7 @@ import java.net.URL;
 
 @RestController
 @RequestMapping("/api")
+@CrossOrigin(origins = "https://minsuportfolio.xyz")  // 또는 모든 도메인을 허용하려면 "*"
 public class playGroundController {
 
 @PostMapping("/start-crawling")
