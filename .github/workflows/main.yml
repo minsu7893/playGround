@@ -37,13 +37,13 @@ jobs:
     - name: Build and run the application on server
       id: build_and_run
       run: |
-        sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+        sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
           cd ${{ secrets.TARGET_DIRECTORY_PLAYGROUND }}
           # 빌드 로그와 실행 로그를 콘솔과 파일에 동시에 출력
           ./gradlew build | tee build_output.log
           nohup ./gradlew bootRun | tee app.log &
         EOF
-      continue-on-error: true # 빌드 중 오류가 나더라도 중단하지 않음
+      continue-on-error: true # 실행 중 오류 발생 시 실패 처리    
 
     # 실행 로그에서 오류가 있는지 확인 (app.log)
     - name: Monitor application log for errors
