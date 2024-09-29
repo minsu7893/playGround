@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <context id="DB2Tables" targetRuntime="MyBatis3">
+        <!-- JDBC 연결 정보 -->
+        <jdbcConnection driverClass="oracle.jdbc.driver.OracleDriver"
+                        connectionURL="jdbc:oracle:thin:@minsuplayground_high?TNS_ADMIN=src/main/resources/wallet"
+                        userId="ADMIN"
+                        password="Rlaalstn12.,."/>
+
+        <!-- Java 모델 파일을 생성할 패키지 설정 -->
+        <javaModelGenerator targetPackage="com.playGround.model" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="trimStrings" value="true"/>
+            <property name="overwrite" value="false"/>  <!-- 덮어쓰기 방지 설정 -->
+        </javaModelGenerator>
+
+        <!-- Mapper XML 파일을 생성할 디렉토리 설정 -->
+        <sqlMapGenerator targetPackage="mapper" targetProject="src/main/resources">
+            <property name="enableSubPackages" value="true"/>
+            <property name="overwrite" value="false"/>  <!-- 덮어쓰기 방지 설정 -->
+        </sqlMapGenerator>
+
+        <!-- 매퍼 인터페이스를 생성할 패키지 설정 -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.playGround.mapper" targetProject="src/main/java">
+            <property name="enableSubPackages" value="true"/>
+            <property name="overwrite" value="false"/>  <!-- 덮어쓰기 방지 설정 -->
+        </javaClientGenerator>
+
+        <!-- 테이블 설정: 각 테이블과 매핑될 도메인 클래스 지정 -->
+        <table tableName="LAND" domainObjectName="Land"/>
+    </context>
+</generatorConfiguration>

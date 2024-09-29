@@ -1,6 +1,9 @@
-package com.playGround.playGround.Service;
+package com.playGround.Service;
 
 
+import com.playGround.mapper.LandMapper;
+import com.playGround.model.Land;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -9,11 +12,17 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 @Service
 public class comm {
 
+    @Autowired
+    private LandMapper landMapper;  // 의존성 주입
+
     public int sendTelegram(String msg) throws Exception {
+
+        this.sqlTest();
 
         int responseCode = 0;
         {
@@ -67,4 +76,12 @@ public class comm {
 
         return responseCode;
     }
+
+    public void sqlTest(){
+    List<Land> land = landMapper.selectByExample(null);
+
+    System.out.println("test");
+
+    }
+
 }

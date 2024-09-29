@@ -1,6 +1,6 @@
-package com.playGround.playGround.Controller;
+package com.playGround.Controller;
 
-import com.playGround.playGround.Service.comm;
+import com.playGround.Service.comm;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
