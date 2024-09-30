@@ -1,28 +1,32 @@
 package com.playGround.Service;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.playGround.Util.WebDriverUtil;
 import com.playGround.mapper.LandMapper;
 import com.playGround.model.Land;
+import com.playGround.model.LandExample;
+import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @Service
-public class comm {
+public class CommService {
+
+    private final LandMapper landMapper;
 
     @Autowired
-    private LandMapper landMapper;  // 의존성 주입
+    public CommService(LandMapper landMapper) {
+        this.landMapper = landMapper;
+    }
 
     public int sendTelegram(String msg) throws Exception {
-
-        this.sqlTest();
 
         int responseCode = 0;
         {
@@ -78,10 +82,47 @@ public class comm {
     }
 
     public void sqlTest(){
-    List<Land> land = landMapper.selectByExample(null);
 
-    System.out.println("test");
+        try{
 
+            LandExample landModel = new LandExample();
+
+            landModel.createCriteria().andCortarEqualTo("강남구");
+
+            ObjectMapper mapper = new ObjectMapper();
+
+            List<Land> land = landMapper.selectByCriteria(landModel);
+
+            for(int i = 0 ; i < land.size() ; i++){
+                System.out.println("sql select : " + i);
+                System.out.println(mapper.writeValueAsString(land.get(i)));
+            }
+
+        }catch (Exception e){
+            System.out.println();
+        }
     }
 
+    public void chromTest() throws Exception {
+
+        WebDriver driver = WebDriverUtil.getChromeDriver();
+
+        String url = "http://naver.com";
+
+        driver.get(url);
+
+        try {
+            this.sendTelegram(driver.getPageSource());
+        } catch (Exception e) {
+            StringWriter sw = new StringWriter();
+            PrintWriter pw = new PrintWriter(sw);
+            e.printStackTrace(pw);
+
+            // 스택 트레이스 문자열로 저장
+            String stackTrace = sw.toString();
+
+            this.sendTelegram(stackTrace);
+        }
+
+    }
 }
