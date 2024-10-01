@@ -74,3 +74,6 @@ tasks.register('mybatisGenerator', JavaExec) {
 	mainClass.set('org.mybatis.generator.api.ShellRunner')
 	args = ['-configfile', 'src/main/resources/generatorConfig.xml', '-overwrite']
 }
+
+
+//test
