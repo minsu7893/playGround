@@ -13,8 +13,6 @@ java {
 	}
 }
 
-org.gradle.java.home=/usr/lib/jvm/java-17-openjdk-amd64
-
 configurations {
 	compileOnly {
 		extendsFrom annotationProcessor
