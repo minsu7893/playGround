@@ -41,8 +41,10 @@ jobs:
           cd ${{ secrets.TARGET_DIRECTORY_PLAYGROUND }}
           # 빌드 로그와 실행 로그를 콘솔과 파일에 동시에 출력
           ./gradlew build 2>&1 | tee build_output.log
-          nohup ./gradlew bootRun > app.log 2>&1 & disown # 백그라운드에서 애플리케이션 실행 후 세션 분리
-          exit 0 # SSH 세션 즉시 종료
+          nohup ./gradlew bootRun > app.log 2>&1 & disown
+          tail -f app.log | grep -m 1 "Started" # 'Started'라는 문자열이 app.log에 나타날 때까지 기다림
+          echo "Application has started successfully."
+          exit 0
         EOF
       continue-on-error: true # 실행 중 오류 발생 시 실패 처리    
 
