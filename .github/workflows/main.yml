@@ -34,40 +34,28 @@ jobs:
       run: |
         sshpass -p "${{ secrets.SSH_PASSWORD }}" rsync -avz --delete -e "ssh -o StrictHostKeyChecking=no" ./ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:${{ secrets.TARGET_DIRECTORY_PLAYGROUND }}
 
-    - name: Build and run the application on server
-      id: build_and_run
+    - name: Build the application on server
       run: |
-        sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -tt -o StrictHostKeyChecking=no -o ServerAliveInterval=60 ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+        sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
           cd ${{ secrets.TARGET_DIRECTORY_PLAYGROUND }}
-        
-          # 빌드 로그와 실행 로그를 콘솔과 파일에 동시에 출력
           echo "Starting build process..."
           ./gradlew build 2>&1 | tee build_output.log
-        
-          if [ $? -eq 0 ]; then
-            echo "Build completed successfully."
-            echo "Sleeping for 15 seconds to allow preparation for bootRun..."
-            sleep 15
-        
-            # bootRun을 백그라운드에서 실행하고 로그 확인
-            echo "Starting application using bootRun..."
-            nohup ./gradlew bootRun > app.log 2>&1 &
-            disown # 백그라운드 프로세스와 SSH 세션을 분리
-            sleep 10 # bootRun이 충분히 실행될 시간을 확보
-        
-            # 로그에서 'Started'라는 문자열이 나올 때까지 기다림
-            echo "Checking for app.log..."
-            tail -f app.log | grep -m 1 "Started" 
-        
-            echo "Application has started successfully."
-          else
-            echo "Build failed. Exiting."
-            exit 1
-          fi
-        
           exit 0
         EOF
-      continue-on-error: true # 실행 중 오류 발생 시 실패 처리
+
+    - name: Run the application on server
+      if: success()  # 빌드가 성공했을 때만 실행
+      run: |
+        sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          cd ${{ secrets.TARGET_DIRECTORY_PLAYGROUND }}
+          echo "Starting application using bootRun..."
+          nohup ./gradlew bootRun > app.log 2>&1 &
+          disown
+          sleep 10
+          tail -f app.log | grep -m 1 "Started"
+          echo "Application has started successfully."
+          exit 0
+        EOF
 
     # 실행 로그에서 오류가 있는지 확인 (app.log)
     - name: Monitor application log for errors
