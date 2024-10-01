@@ -11,7 +11,7 @@ import java.time.Duration;
 @Component
 public class WebDriverUtil {
 
-    private static final String WEB_DRIVER_PATH = "/home/minsu/python/chrome"; // WebDriver 경로
+    private static final String WEB_DRIVER_PATH = "/usr/local/bin/chromedriver"; // WebDriver 경로
 
     public static WebDriver getChromeDriver() {
         if (ObjectUtils.isEmpty(System.getProperty("webdriver.chrome.driver"))) {
