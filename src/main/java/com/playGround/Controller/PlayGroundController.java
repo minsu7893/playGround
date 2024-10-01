@@ -45,6 +45,7 @@ public class PlayGroundController {
         try{
             commService.chromTest();
         }catch (Exception e){
+            e.printStackTrace();
             return "에러";
         }
         return "정상";
