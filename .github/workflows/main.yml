@@ -41,13 +41,16 @@ jobs:
           cd ${{ secrets.TARGET_DIRECTORY_PLAYGROUND }}
           # 빌드 로그와 실행 로그를 콘솔과 파일에 동시에 출력
           ./gradlew build 2>&1 | tee build_output.log
-          sleep 10
-          nohup ./gradlew bootRun > app.log 2>&1 & disown
+          echo "Sleeping for 15 seconds to allow build completion and bootRun to start"
+          sleep 15
+          nohup ./gradlew bootRun > app.log 2>&1 &
+          sleep 10 # bootRun이 충분히 실행될 시간을 확보
+          echo "Checking for app.log..."
           tail -f app.log | grep -m 1 "Started" # 'Started'라는 문자열이 app.log에 나타날 때까지 기다림
           echo "Application has started successfully."
           exit 0
         EOF
-      continue-on-error: true # 실행 중 오류 발생 시 실패 처리    
+      continue-on-error: true # 실행 중 오류 발생 시 실패 처리
 
     # 실행 로그에서 오류가 있는지 확인 (app.log)
     - name: Monitor application log for errors
