@@ -25,7 +25,9 @@ public class WebDriverUtil {
         chromeOptions.addArguments("--no-sandbox");
         chromeOptions.addArguments("--disable-dev-shm-usage");
         chromeOptions.addArguments("--disable-gpu");
-        chromeOptions.setCapability("ignoreProtectedModeSettings", true);
+
+        // ignoreProtectedModeSettings 제거
+        // ChromeOptions는 W3C 표준에 맞게 설정됩니다.
 
         WebDriver driver = new ChromeDriver(chromeOptions);
         driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(30));
@@ -44,5 +46,4 @@ public class WebDriverUtil {
             driver.close();
         }
     }
-
 }
