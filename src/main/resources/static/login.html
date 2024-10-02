@@ -78,9 +78,9 @@
 
 <div class="login-container">
     <h1>Login</h1>
-    <form action="/login" method="post">
+    <form action="/login" method="post" th:action="@{/login}" th:method="post">
         <!-- CSRF Token for Spring Security with Thymeleaf -->
-        <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden" />
+        <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
 
         <div class="form-group">
             <label for="username">Username</label>
