@@ -96,7 +96,7 @@ public class CommService {
 
             ObjectMapper mapper = new ObjectMapper();
 
-            List<Land> land = landMapper.selectByCriteria(landModel);
+            List<Land> land = landMapper.selectByExample(landModel);
 
             for(int i = 0 ; i < land.size() ; i++){
                 System.out.println("sql select : " + i);

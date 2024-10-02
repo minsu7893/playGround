@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Login</title>
+    <title>Login & Register</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         body {
@@ -17,16 +17,16 @@
             align-items: center;
         }
 
-        .login-container {
+        .container {
             background-color: white;
             padding: 40px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 300px;
+            width: 350px;
+            text-align: center;
         }
 
-        .login-container h1 {
-            text-align: center;
+        h1 {
             margin-bottom: 30px;
             color: #333;
         }
@@ -55,7 +55,7 @@
             border-color: #007bff;
         }
 
-        .login-button {
+        .button {
             width: 100%;
             padding: 10px;
             background-color: #007bff;
@@ -68,20 +68,61 @@
             margin-top: 10px;
         }
 
-        .login-button:hover {
+        .button:hover {
             background-color: #0056b3;
         }
 
+        /* 모달 팝업 스타일 */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        /* 모달 팝업 스타일 */
+        .modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 100%;              /* 전체 화면 크기를 고려하여 100%로 설정 */
+            max-width: 350px;          /* 최대 너비 설정 */
+            border-radius: 10px;
+        }
+
+        /* 폼 필드 스타일 수정 */
+        .modal-content .form-group input {
+            width: 95%;              /* 입력 필드가 모달 안에 맞도록 설정 */
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover, .close:focus {
+            color: black;
+        }
     </style>
 </head>
 <body>
 
-<div class="login-container">
+<div class="container">
     <h1>Login</h1>
-    <form action="/login" method="post" th:action="@{/login}" th:method="post">
-        <!-- CSRF Token for Spring Security with Thymeleaf -->
-        <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden"/>
-
+    <form action="/login" method="post">
         <div class="form-group">
             <label for="username">Username</label>
             <input id="username" name="username" placeholder="Enter your username" required type="text">
@@ -90,9 +131,54 @@
             <label for="password">Password</label>
             <input id="password" name="password" placeholder="Enter your password" required type="password">
         </div>
-        <button class="login-button" type="submit">Login</button>
+        <button class="button" type="submit">Login</button>
     </form>
+    <br>
+    <button class="button" id="registerBtn">Register</button>
 </div>
+
+<!-- 회원가입 모달 -->
+<div class="modal" id="registerModal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Register</h2>
+        <form action="/register" method="post">
+            <div class="form-group">
+                <label for="reg-username">Username</label>
+                <input id="reg-username" name="username" placeholder="Enter a new username" required type="text">
+            </div>
+            <div class="form-group">
+                <label for="reg-password">Password</label>
+                <input id="reg-password" name="password" placeholder="Enter a new password" required type="password">
+            </div>
+            <button class="button" type="submit">Register</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // 모달 제어 스크립트
+    var modal = document.getElementById("registerModal");
+    var btn = document.getElementById("registerBtn");
+    var span = document.getElementsByClassName("close")[0];
+
+    // 회원가입 버튼을 클릭하면 모달을 띄움
+    btn.onclick = function () {
+        modal.style.display = "block";
+    }
+
+    // 닫기 버튼을 누르면 모달을 닫음
+    span.onclick = function () {
+        modal.style.display = "none";
+    }
+
+    // 모달 밖을 클릭하면 모달을 닫음
+    window.onclick = function (event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+</script>
 
 </body>
 </html>

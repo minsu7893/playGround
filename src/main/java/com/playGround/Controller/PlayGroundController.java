@@ -1,5 +1,6 @@
 package com.playGround.Controller;
 
+import com.playGround.Security.SecurityConfig;
 import com.playGround.Service.CommService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -13,10 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class PlayGroundController {
 
     private final CommService commService;
+    private final SecurityConfig securityConfig;
 
     @Autowired
-    public PlayGroundController(CommService commService) {
+    public PlayGroundController(CommService commService, SecurityConfig securityConfig) {
         this.commService = commService;
+        this.securityConfig = securityConfig;
     }
 
     @PostMapping("/start-crawling")
@@ -44,6 +47,19 @@ public class PlayGroundController {
 
         try{
             commService.chromTest();
+        }catch (Exception e){
+            e.printStackTrace();
+            return "에러";
+        }
+        return "정상";
+    }
+
+    @PostMapping("/findUsers")
+    public String findUsers(){
+
+
+        try{
+            securityConfig.findUser();
         }catch (Exception e){
             e.printStackTrace();
             return "에러";

@@ -31,6 +31,12 @@
         </javaClientGenerator>
 
         <!-- 테이블 설정: 각 테이블과 매핑될 도메인 클래스 지정 -->
-        <table tableName="LAND" domainObjectName="Land"/>
+<!--        <table tableName="LAND" domainObjectName="Land"/>-->
+        <table tableName="USERS" domainObjectName="Users"/>
     </context>
 </generatorConfiguration>
+
+
+<!--https://g18e95923230ee4-minsuplayground.adb.ap-chuncheon-1.oraclecloudapps.com/ords/admin/_sdw/-->
+<!--admin-->
+<!--Rlaalstn12.,.-->
