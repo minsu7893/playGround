@@ -17,7 +17,9 @@ public class SecurityConfig {
                         .anyRequest().permitAll()  // 나머지 요청은 모두 허용
                 )
                 .formLogin((form) -> form
-                        .defaultSuccessUrl("/index.html", true) // 로그인 성공 시 index.html로 리다이렉트
+                        .loginPage("/login.html")  // 커스텀 로그인 페이지 경로
+                        .defaultSuccessUrl("/index.html", true)
+                        .permitAll()  // 로그인 페이지는 누구나 접근 가능
                 )
                 .logout(LogoutConfigurer::permitAll);  // 로그아웃 허용
 
