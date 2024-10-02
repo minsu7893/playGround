@@ -48,6 +48,10 @@ jobs:
       run: |
         sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
           cd ${{ secrets.TARGET_DIRECTORY_PLAYGROUND }}
+        
+          # 환경 변수 설정
+          export SPRING_SECURITY_USER_PASSWORD=${{ secrets.SPRING_SECURITY_USER_PASSWORD }}
+        
           echo "Starting application using bootRun..."
           nohup ./gradlew bootRun > app.log 2>&1 &
           disown
