@@ -28,6 +28,11 @@ public class CommService {
 
     public int sendTelegram(String msg) throws Exception {
 
+        System.out.println("===============================");
+        System.out.println("CommService.sendTelegram Start");
+        System.out.println(msg);
+        System.out.println("===============================");
+
         int responseCode = 0;
         {
             // 자바 프로젝트의 실행 로직 예시 (시스템 명령 실행)
