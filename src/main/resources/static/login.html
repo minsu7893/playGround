@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
@@ -79,7 +79,9 @@
 <div class="login-container">
     <h1>Login</h1>
     <form action="/login" method="post">
-        <input name="${_csrf.parameterName}" type="hidden" value="${_csrf.token}" />
+        <!-- CSRF Token for Spring Security with Thymeleaf -->
+        <input th:name="${_csrf.parameterName}" th:value="${_csrf.token}" type="hidden" />
+
         <div class="form-group">
             <label for="username">Username</label>
             <input id="username" name="username" placeholder="Enter your username" required type="text">
@@ -89,7 +91,6 @@
             <input id="password" name="password" placeholder="Enter your password" required type="password">
         </div>
         <button class="login-button" type="submit">Login</button>
-
     </form>
 </div>
 
