@@ -65,6 +65,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // 로그인 성공 시 무조건 /playGround/로 리다이렉트하는 SuccessHandler
         SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
+        successHandler.setDefaultTargetUrl("/playGround/");  // 기본 리다이렉트 URL
 
         http
                 .authorizeHttpRequests((requests) -> requests
@@ -75,14 +76,14 @@ public class SecurityConfig {
                 .formLogin((form) -> form
                         .loginPage("/login.html")  // 커스텀 로그인 페이지 경로
                         .loginProcessingUrl("/login")  // 로그인 처리 경로
-                        .successHandler(successHandler)  // 로그인 성공 후 이전 요청 URL로 리다이렉트
+                        .successHandler(successHandler)  // 성공 시 이전 경로로 리다이렉트, 없으면 기본 경로
                         .permitAll()  // 로그인 페이지는 누구나 접근 가능
                 )
                 .logout((logout) -> logout
                         .logoutSuccessUrl("/login.html")  // 로그아웃 성공 시 login.html로 리다이렉트
                         .permitAll()
                 )
-                .csrf(csrf -> csrf.disable());  // 테스트 목적으로 CSRF 비활성화
+                .csrf(csrf -> csrf.disable());
 
         return http.build();
     }
