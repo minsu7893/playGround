@@ -14,7 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,22 +64,18 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // 로그인 성공 시 무조건 /playGround/로 리다이렉트하는 SuccessHandler
-        SimpleUrlAuthenticationSuccessHandler successHandler = new SimpleUrlAuthenticationSuccessHandler();
-        successHandler.setDefaultTargetUrl("/playGround/");
-        successHandler.setAlwaysUseDefaultTargetUrl(true);  // 무조건 해당 URL로 리다이렉트
+        SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
 
         http
-                .requiresChannel(channel -> channel
-                        .anyRequest().requiresSecure()  // 모든 요청을 HTTPS로 강제
-                )
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/index.html").authenticated()  // index.html에만 인증 요구
+                        .requestMatchers("/playGround/**").authenticated()  // playGround 경로는 인증된 사용자만 접근 가능
+                        .requestMatchers("/index.html").authenticated()  // index.html에도 인증 요구
                         .anyRequest().permitAll()  // 나머지 요청은 모두 허용
                 )
                 .formLogin((form) -> form
                         .loginPage("/login.html")  // 커스텀 로그인 페이지 경로
                         .loginProcessingUrl("/login")  // 로그인 처리 경로
-                        .successHandler(successHandler)  // 로그인 성공 시 핸들러 설정
+                        .successHandler(successHandler)  // 로그인 성공 후 이전 요청 URL로 리다이렉트
                         .permitAll()  // 로그인 페이지는 누구나 접근 가능
                 )
                 .logout((logout) -> logout
