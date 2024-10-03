@@ -65,7 +65,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         // 로그인 성공 시 무조건 /playGround/로 리다이렉트하는 SuccessHandler
         SimpleUrlAuthenticationSuccessHandler successHandler = new SimpleUrlAuthenticationSuccessHandler();
-        successHandler.setDefaultTargetUrl("/playGround/");
+        successHandler.setDefaultTargetUrl("https://minsuportfolio.xyz/playGround/");
         successHandler.setAlwaysUseDefaultTargetUrl(true);  // 항상 이 URL로 리다이렉트
 
         http
