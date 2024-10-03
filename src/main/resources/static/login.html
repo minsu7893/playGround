@@ -104,7 +104,6 @@
             font-size: 14px;
         }
 
-
         .close {
             color: #aaa;
             float: right;
@@ -122,7 +121,7 @@
 
 <div class="container">
     <h1>Login</h1>
-    <form action="/login" method="post">
+    <form id="loginForm">
         <div class="form-group">
             <label for="username">Username</label>
             <input id="username" name="username" placeholder="Enter your username" required type="text">
@@ -142,7 +141,7 @@
     <div class="modal-content">
         <span class="close">&times;</span>
         <h2>Register</h2>
-        <form action="/api/register" method="post">
+        <form id="registerForm">
             <div class="form-group">
                 <label for="reg-username">Username</label>
                 <input id="reg-username" name="username" placeholder="Enter a new username" required type="text">
@@ -178,6 +177,72 @@
             modal.style.display = "none";
         }
     }
+
+    // 회원가입 폼 제출 핸들링
+    document.getElementById("registerForm").onsubmit = async function (event) {
+        event.preventDefault(); // 기본 제출 방지
+
+        const username = document.getElementById("reg-username").value;
+        const password = document.getElementById("reg-password").value;
+
+        // fetch API로 POST 요청 보내기
+        try {
+            const response = await fetch("/api/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            });
+
+            if (response.ok) { // 응답 상태가 200번인 경우
+                alert("Registration successful!"); // 얼럿 띄우기
+                modal.style.display = "none"; // 모달 닫기
+            } else {
+                alert("Registration failed. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            alert("An error occurred. Please try again.");
+        }
+    };
+
+    // 로그인 폼 제출 핸들링
+    document.getElementById("loginForm").onsubmit = async function (event) {
+        event.preventDefault(); // 기본 제출 방지
+
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        // fetch API로 로그인 POST 요청 보내기
+        try {
+            const response = await fetch("/login", { // 엔드포인트에 맞게 URL 수정
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            });
+
+            const responseBody = await response.text(); // 서버에서 문자열 형태로 응답을 받을 경우
+            if (response.ok) {
+                // window.location.href = "/playGround/";
+            } else {
+                // 실패 상태일 때 (500 등)
+                alert("Error: " + responseBody); // 오류 메시지를 출력
+            }
+        } catch (error) {
+            // 네트워크 오류 등 기타 예외 상황 처리
+            console.error("Network error:", error);
+            alert("Network error. Please try again later.");
+        }
+    };
 </script>
 
 </body>

@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +63,11 @@ public class SecurityConfig {
     // SecurityFilterChain 빈 정의 (보안 설정)
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // 로그인 성공 시 무조건 /playGround/로 리다이렉트하는 SuccessHandler
+        SimpleUrlAuthenticationSuccessHandler successHandler = new SimpleUrlAuthenticationSuccessHandler();
+        successHandler.setDefaultTargetUrl("/playGround/");
+        successHandler.setAlwaysUseDefaultTargetUrl(true);  // 무조건 해당 URL로 리다이렉트
+
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/index.html").authenticated()  // index.html에만 인증 요구
@@ -70,7 +76,7 @@ public class SecurityConfig {
                 .formLogin((form) -> form
                         .loginPage("/login.html")  // 커스텀 로그인 페이지 경로
                         .loginProcessingUrl("/login")  // 로그인 처리 경로
-                        .defaultSuccessUrl("/index.html", true)  // 로그인 성공 시 index.html로 리다이렉트
+                        .successHandler(successHandler)  // 로그인 성공 시 핸들러 설정
                         .permitAll()  // 로그인 페이지는 누구나 접근 가능
                 )
                 .logout((logout) -> logout
@@ -108,8 +114,13 @@ public class SecurityConfig {
      * @return 처리상태 여부 (Y : 정상, N : 오류)
      */
     public String registerUser(String userName, String passWord){
-        String pcsnYN = "";
 
+        System.out.println("=========================");
+        System.out.println("USERNAME : " + userName);
+        System.out.println("PASSWORD : " + passWord);
+        System.out.println("=========================");
+
+        String pcsnYN = "";
 
         List<Users> users = null;
         try {
