@@ -69,6 +69,9 @@ public class SecurityConfig {
         successHandler.setAlwaysUseDefaultTargetUrl(true);  // 무조건 해당 URL로 리다이렉트
 
         http
+                .requiresChannel(channel -> channel
+                        .anyRequest().requiresSecure()  // 모든 요청을 HTTPS로 강제
+                )
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/index.html").authenticated()  // index.html에만 인증 요구
                         .anyRequest().permitAll()  // 나머지 요청은 모두 허용
