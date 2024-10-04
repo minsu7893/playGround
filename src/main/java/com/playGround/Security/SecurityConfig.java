@@ -8,6 +8,7 @@ import com.playGround.model.UsersExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -44,6 +45,8 @@ public class SecurityConfig {
         List<Users> users = this.findUser();
 
         for(int i = 0 ; i < users.size() ; i++){
+
+
 
             username = users.get(i).getUsername();
             password = users.get(i).getPassword();
@@ -121,6 +124,16 @@ public class SecurityConfig {
         System.out.println("PASSWORD : " + passWord);
         System.out.println("=========================");
 
+        // userName이 영문자와 숫자로만 이루어지지 않은 경우에 오류 메시지 반환
+        if (userName == null || !userName.matches("^[a-zA-Z0-9]+$")) {
+            return "ID는 영문과 숫자만 입력가능합니다.";
+        }
+
+        // passWord가 영문자, 숫자, 특수문자 외에 다른 문자가 있는 경우에 오류 메시지 반환
+        if (passWord == null || !passWord.matches("^[a-zA-Z0-9!@#$%^&*()-_+=<>?]+$")) {
+            return "PW는 영문, 숫자, 특수문자만 입력가능합니다.";
+        }
+
         String pcsnYN = "";
 
         List<Users> users = null;
@@ -133,19 +146,16 @@ public class SecurityConfig {
 
             int pcsnNbi = usersMapper.insert(usersModel);
 
-            if(pcsnNbi != 1){
+            if (pcsnNbi != 1) {
                 throw new Exception();
-            }else {
-                pcsnYN = "Y";
-
+            } else {
                 commService.sendTelegram("신규회원 : " + userName);
-
             }
-
+        }catch (DuplicateKeyException e) {
+            return "이미 가입된 ID입니다.";
         } catch (Exception e) {
-            return "N";
+            return "오류 !";
         }
-
-        return pcsnYN;
+        return "";
     }
 }

@@ -198,11 +198,13 @@
                 })
             });
 
+            const message = await response.text(); // 응답 본문을 텍스트로 변환
+
             if (response.ok) { // 응답 상태가 200번인 경우
-                alert("Registration successful!"); // 얼럿 띄우기
+                alert(message); // 성공 메시지를 얼럿으로 표시
                 modal.style.display = "none"; // 모달 닫기
             } else {
-                alert("Registration failed. Please try again.");
+                alert(message); // 실패 메시지를 얼럿으로 표시
             }
         } catch (error) {
             console.error("Error:", error);
