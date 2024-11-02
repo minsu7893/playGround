@@ -42,7 +42,7 @@ public class PlayGroundController {
     public String startSsh() {
         try {
             int result = playGroundService.ssh();
-            if (result != 200) {
+            if (result <= 0) {
                 throw new Exception("Error in starting SSH");
             }
             return "성공";

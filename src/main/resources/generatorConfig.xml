@@ -32,7 +32,7 @@
 
         <!-- 테이블 설정: 각 테이블과 매핑될 도메인 클래스 지정 -->
 <!--        <table tableName="LAND" domainObjectName="Land"/>-->
-        <table tableName="USERS" domainObjectName="Users"/>
+        <table tableName="SSH" domainObjectName="SSH"/>
     </context>
 </generatorConfiguration>
 
