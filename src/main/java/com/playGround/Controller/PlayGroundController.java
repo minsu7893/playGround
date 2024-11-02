@@ -16,23 +16,21 @@ public class PlayGroundController {
 
     private final CommService commService;
     private final SecurityConfig securityConfig;
-    private final PlayGroundService playGroundService; // playGroundService 필드 선언 추가
+    private final PlayGroundService playGroundService;  // playGroundService 필드 선언
 
     @Autowired
-    public PlayGroundController(CommService commService, SecurityConfig securityConfig) {
+    public PlayGroundController(CommService commService, SecurityConfig securityConfig, PlayGroundService playGroundService) {
         this.commService = commService;
         this.securityConfig = securityConfig;
-        this.playGroundService = playGroundService;
+        this.playGroundService = playGroundService;  // playGroundService 주입
     }
 
     @PostMapping("/start-crawling")
     public String startCrawling() {
         try {
-            // 실제 자바 프로젝트의 실행 로직 (예: 크롤러 실행)
             int result = commService.sendTelegram("test");
-
             if (result != 200) {
-                throw new Exception("");
+                throw new Exception("Error in sending Telegram message");
             }
             return "크롤링이 성공적으로 시작되었습니다.";
         } catch (Exception e) {
@@ -43,11 +41,9 @@ public class PlayGroundController {
     @PostMapping("/start-ssh")
     public String startSsh() {
         try {
-            // 실제 자바 프로젝트의 실행 로직 (예: 크롤러 실행)
-             int result = playGroundService.ssh();
-
+            int result = playGroundService.ssh();
             if (result != 200) {
-                throw new Exception("");
+                throw new Exception("Error in starting SSH");
             }
             return "성공";
         } catch (Exception e) {
@@ -56,16 +52,15 @@ public class PlayGroundController {
     }
 
     @PostMapping("/sqlTest")
-    public void sqlTest(){
+    public void sqlTest() {
         commService.sqlTest();
     }
 
     @PostMapping("/chromeTest")
-    public String chromeTest(){
-
-        try{
+    public String chromeTest() {
+        try {
             commService.chromTest();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return "에러";
         }
@@ -73,12 +68,10 @@ public class PlayGroundController {
     }
 
     @PostMapping("/findUsers")
-    public String findUsers(){
-
-
-        try{
+    public String findUsers() {
+        try {
             securityConfig.findUser();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             return "에러";
         }
