@@ -1,6 +1,6 @@
 package com.playGround.mapper;
 
-import com.example.model.Ssh;
+import com.playGround.model.Ssh;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Insert;
