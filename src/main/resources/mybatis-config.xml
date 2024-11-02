@@ -6,5 +6,6 @@
     </settings>
     <mappers>
         <mapper resource="mapper/LandMapper.xml"/>
+        <mapper resource="mapper/SshMapper.xml"/>
     </mappers>
 </configuration>
