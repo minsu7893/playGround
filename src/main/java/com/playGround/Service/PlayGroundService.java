@@ -1,8 +1,8 @@
 package com.playGround.Service;
 
 
-import com.playGround.mapper.SSHMapper;
-import com.playGround.model.SSH;
+import com.playGround.mapper.SshMapper;
+import com.playGround.model.Ssh;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,10 +11,10 @@ import java.util.Date;
 @Service
 public class PlayGroundService {
 
-    private final SSHMapper sshMapper;    // SshMapper 필드 선언
+    private final SshMapper sshMapper;    // SshMapper 필드 선언
 
     @Autowired
-    public PlayGroundService(SSHMapper sshMapper) {
+    public PlayGroundService(SshMapper sshMapper) {
         this.sshMapper = sshMapper;
     }
 
@@ -22,7 +22,7 @@ public class PlayGroundService {
     public int ssh() {
         try {
 
-            SSH ssh = new SSH();
+            Ssh ssh = new Ssh();
             ssh.setSshAcceptTime(new Date());
 
             return sshMapper.insert(ssh);
