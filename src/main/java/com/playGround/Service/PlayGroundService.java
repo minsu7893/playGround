@@ -6,24 +6,15 @@ public class PlayGroundService {
 
         try{
 
+            // Ssh 객체 생성
             Ssh ssh = new Ssh();
-            ssh.
+            ssh.setSshAcceptTime(new java.util.Date());  // 필요한 데이터 설정
+            sshMapper.insertSsh(ssh);  // 데이터베이스에 삽입
 
-            LandExample landModel = new LandExample();
-
-            landModel.createCriteria().andCortarEqualTo("강남구");
-
-            ObjectMapper mapper = new ObjectMapper();
-
-            List<Land> land = landMapper.selectByExample(landModel);
-
-            for(int i = 0 ; i < land.size() ; i++){
-                System.out.println("sql select : " + i);
-                System.out.println(mapper.writeValueAsString(land.get(i)));
-            }
+            return "200";
 
         }catch (Exception e){
-            System.out.println();
+            return "";
         }
     }
 
