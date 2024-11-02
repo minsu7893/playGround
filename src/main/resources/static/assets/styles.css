@@ -13,3 +13,12 @@ button {
     font-size: 16px;
     cursor: pointer;
 }
+
+/* styles.css */
+.icon-container {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 24px; /* 아이콘 크기 조정 */
+    color: #333; /* 아이콘 색상 설정 */
+}

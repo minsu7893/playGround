@@ -2,6 +2,7 @@ package com.playGround.Controller;
 
 import com.playGround.Security.SecurityConfig;
 import com.playGround.Service.CommService;
+import com.playGround.Service.PlayGroundService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,6 +21,7 @@ public class PlayGroundController {
     public PlayGroundController(CommService commService, SecurityConfig securityConfig) {
         this.commService = commService;
         this.securityConfig = securityConfig;
+        this.playGroundService = playGroundService;
     }
 
     @PostMapping("/start-crawling")
@@ -34,6 +36,21 @@ public class PlayGroundController {
             return "크롤링이 성공적으로 시작되었습니다.";
         } catch (Exception e) {
             return "크롤링 시작 중 오류가 발생했습니다.";
+        }
+    }
+
+    @PostMapping("/start-ssh")
+    public String startSsh() {
+        try {
+            // 실제 자바 프로젝트의 실행 로직 (예: 크롤러 실행)
+             int result = playGroundService.ssh();
+
+            if (result != 200) {
+                throw new Exception("");
+            }
+            return "성공";
+        } catch (Exception e) {
+            return "실패";
         }
     }
 
