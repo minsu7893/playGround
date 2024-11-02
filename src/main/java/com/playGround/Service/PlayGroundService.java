@@ -17,17 +17,17 @@ public class PlayGroundService {
         this.sshMapper = sshMapper;
     }
 
-    public String ssh() {
+    public int ssh() {
         try {
             // Ssh 객체 생성 및 데이터 설정
             Ssh ssh = new Ssh();
             ssh.setSshAcceptTime(new Date());  // 현재 시간 설정
             sshMapper.insertSsh(ssh);          // 데이터베이스에 삽입
 
-            return "200";
+            return 200;
         } catch (Exception e) {
             System.out.println("오류 발생: " + e.getMessage());
-            return "";
+            return 0;
         }
     }
 }

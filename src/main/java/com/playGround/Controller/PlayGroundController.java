@@ -16,6 +16,7 @@ public class PlayGroundController {
 
     private final CommService commService;
     private final SecurityConfig securityConfig;
+    private final PlayGroundService playGroundService; // playGroundService 필드 선언 추가
 
     @Autowired
     public PlayGroundController(CommService commService, SecurityConfig securityConfig) {
