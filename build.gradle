@@ -71,6 +71,8 @@ dependencies {
 
 tasks.named('test') {
 	useJUnitPlatform()
+    maxHeapSize = "512m"
+    jvmArgs "-XX:MaxMetaspaceSize=256m"
 	ignoreFailures = true  // 테스트 실패 시 빌드 실패하지 않도록 설정
 }
 
