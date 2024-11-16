@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,15 +9,169 @@
     <link href="/assets/favicon.ico" rel="icon" type="image/x-icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
+
 <body>
     <div class="icon-container">
         <i class="fas fa-terminal" id="sshIcon"></i> <!-- SSH 아이콘에 id 추가 -->
     </div>
-    <h1>네이버 부동산 웹 크롤러 V1</h1>
-    <p>아래 버튼을 눌러 크롤링 시작</p>
-    <button id="startCrawling">크롤링 시작</button>
+    <div class="container">
+        <!-- 네이버 부동산 웹 크롤러 섹션 -->
+        <div class="section">
+            <div class="icon-container">
+                <i class="fas fa-terminal" id="sshIcon"></i> <!-- SSH 아이콘에 id 추가 -->
+            </div>
+            <h1>네이버 부동산 웹 크롤러 V1</h1>
+            <p>아래 버튼을 눌러 크롤링 시작</p>
+            <button id="startCrawling">크롤링 시작</button>
+        </div>
 
-    <!-- 외부 자바스크립트 파일을 로드 -->
-    <script src="./assets/script.js"></script>
+        <!-- KTX 매크로 섹션 -->
+
+        <div class="section">
+            <h1>KTX 매크로</h1>
+            <p>아래 버튼을 눌러 KTX 매크로 시작</p>
+
+            <!-- 출발지 콤보박스 -->
+            <label for="startStation">출발지:</label>
+            <select id="startStation" name="startStation">
+
+                <option value="서울">서울 (0001)</option>
+                <option value="용산">용산 (0104)</option>
+                <option value="영등포">영등포 (0002)</option>
+                <option value="광명">광명 (0501)</option>
+                <option value="수원">수원 (0003)</option>
+                <option value="평택">평택 (0004)</option>
+                <option value="천안아산">천안아산 (0502)</option>
+                <option value="천안">천안 (0005)</option>
+                <option value="오송">오송 (0297)</option>
+                <option value="조치원">조치원 (0007)</option>
+                <option value="대전">대전 (0010)</option>
+                <option value="서대전">서대전 (0025)</option>
+                <option value="김천">김천 (0012)</option>
+                <option value="구미">구미 (0013)</option>
+                <option value="김천구미">김천구미 (0507)</option>
+                <option value="대구">대구 (0023)</option>
+                <option value="동대구">동대구 (0015)</option>
+                <option value="경주">경주 (0508)</option>
+                <option value="포항">포항 (0515)</option>
+                <option value="밀양">밀양 (0017)</option>
+                <option value="구포">구포 (0019)</option>
+                <option value="부산">부산 (0020)</option>
+                <option value="태화강">태화강 (0125)</option>
+                <option value="울산(통도사)">울산(통도사) (0509)</option>
+                <option value="마산">마산 (0059)</option>
+                <option value="창원중앙">창원중앙 (0512)</option>
+                <option value="경산">경산 (0024)</option>
+                <option value="논산">논산 (0027)</option>
+                <option value="익산">익산 (0030)</option>
+                <option value="정읍">정읍 (0033)</option>
+                <option value="광주송정">광주송정 (0036)</option>
+                <option value="목포">목포 (0041)</option>
+                <option value="전주">전주 (0045)</option>
+                <option value="순천">순천 (0051)</option>
+                <option value="여수EXPO">여수EXPO (0053)</option>
+                <option value="대천">대천 (0083)</option>
+                <option value="청량리">청량리 (0090)</option>
+                <option value="춘천">춘천 (0153)</option>
+                <option value="제천">제천 (0093)</option>
+                <option value="동해">동해 (0113)</option>
+                <option value="강릉">강릉 (0115)</option>
+                <option value="행신">행신 (0390)</option>
+                <option value="남춘천">남춘천 (0152)</option>
+                <option value="부전">부전 (0190)</option>
+                <option value="신탄진">신탄진 (0009)</option>
+                <option value="영동">영동 (0011)</option>
+                <option value="왜관">왜관 (0014)</option>
+                <option value="원주">원주 (0092)</option>
+                <option value="정동진">정동진 (0262)</option>
+                <option value="홍성">홍성 (0081)</option>
+                <option value="나주">나주 (0037)</option>
+                <option value="남원">남원 (0048)</option>
+                <!-- 다른 옵션들 추가 -->
+            </select>
+            <br><br>
+
+            <!-- 도착지 콤보박스 -->
+            <label for="endStation">도착지:</label>
+            <select id="endStation" name="endStation">
+
+                <option value="서울">서울 (0001)</option>
+                <option value="용산">용산 (0104)</option>
+                <option value="영등포">영등포 (0002)</option>
+                <option value="광명">광명 (0501)</option>
+                <option value="수원">수원 (0003)</option>
+                <option value="평택">평택 (0004)</option>
+                <option value="천안아산">천안아산 (0502)</option>
+                <option value="천안">천안 (0005)</option>
+                <option value="오송">오송 (0297)</option>
+                <option value="조치원">조치원 (0007)</option>
+                <option value="대전">대전 (0010)</option>
+                <option value="서대전">서대전 (0025)</option>
+                <option value="김천">김천 (0012)</option>
+                <option value="구미">구미 (0013)</option>
+                <option value="김천구미">김천구미 (0507)</option>
+                <option value="대구">대구 (0023)</option>
+                <option value="동대구">동대구 (0015)</option>
+                <option value="경주">경주 (0508)</option>
+                <option value="포항">포항 (0515)</option>
+                <option value="밀양">밀양 (0017)</option>
+                <option value="구포">구포 (0019)</option>
+                <option value="부산">부산 (0020)</option>
+                <option value="태화강">태화강 (0125)</option>
+                <option value="울산(통도사)">울산(통도사) (0509)</option>
+                <option value="마산">마산 (0059)</option>
+                <option value="창원중앙">창원중앙 (0512)</option>
+                <option value="경산">경산 (0024)</option>
+                <option value="논산">논산 (0027)</option>
+                <option value="익산">익산 (0030)</option>
+                <option value="정읍">정읍 (0033)</option>
+                <option value="광주송정">광주송정 (0036)</option>
+                <option value="목포">목포 (0041)</option>
+                <option value="전주">전주 (0045)</option>
+                <option value="순천">순천 (0051)</option>
+                <option value="여수EXPO">여수EXPO (0053)</option>
+                <option value="대천">대천 (0083)</option>
+                <option value="청량리">청량리 (0090)</option>
+                <option value="춘천">춘천 (0153)</option>
+                <option value="제천">제천 (0093)</option>
+                <option value="동해">동해 (0113)</option>
+                <option value="강릉">강릉 (0115)</option>
+                <option value="행신">행신 (0390)</option>
+                <option value="남춘천">남춘천 (0152)</option>
+                <option value="부전">부전 (0190)</option>
+                <option value="신탄진">신탄진 (0009)</option>
+                <option value="영동">영동 (0011)</option>
+                <option value="왜관">왜관 (0014)</option>
+                <option value="원주">원주 (0092)</option>
+                <option value="정동진">정동진 (0262)</option>
+                <option value="홍성">홍성 (0081)</option>
+                <option value="나주">나주 (0037)</option>
+                <option value="남원">남원 (0048)</option>
+                <!-- 다른 옵션들 추가 -->
+            </select>
+            <br><br>
+
+            <!-- 날짜 입력 -->
+            <label for="customDate">날짜</label>
+            <input type="date" id="customDate" name="customDate">
+            <br><br>
+
+            <!-- 시간 입력 -->
+            <label for="departureTime">시간:</label>
+            <select id="departureTime" name="departureTime">
+                <option value="00">00시 (자정)</option>
+                <!-- 생략된 옵션 -->
+                <option value="22" selected>22시</option>
+            </select>
+            <br><br>
+
+            <!-- 매크로 시작 버튼 -->
+            <button id="startKtxMacro">매크로 시작</button>
+
+            <!-- 매크로 종료 버튼 -->
+            <button id="stopKtxMacro">매크로 종료</button>
+        </div>
+        <script src="./assets/script.js"></script>
 </body>
+
 </html>

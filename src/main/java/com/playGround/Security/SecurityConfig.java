@@ -1,10 +1,8 @@
 package com.playGround.Security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.playGround.Service.CommService;
-import com.playGround.mapper.UsersMapper;
-import com.playGround.model.Users;
-import com.playGround.model.UsersExample;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,9 +14,15 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.playGround.Service.CommService;
+import com.playGround.mapper.UsersMapper;
+import com.playGround.model.Users;
+import com.playGround.model.UsersExample;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 
 @Configuration
@@ -46,8 +50,6 @@ public class SecurityConfig {
 
         for(int i = 0 ; i < users.size() ; i++){
 
-
-
             username = users.get(i).getUsername();
             password = users.get(i).getPassword();
 
@@ -73,6 +75,14 @@ public class SecurityConfig {
 
         http
                 .authorizeHttpRequests((requests) -> requests
+                        // 로컬 IP로 접속 시 모든 요청 허용
+                        .requestMatchers(new RequestMatcher() {
+                            @Override
+                            public boolean matches(HttpServletRequest request) {
+                                String remoteAddr = request.getRemoteAddr();
+                                return "127.0.0.1".equals(remoteAddr) || "0:0:0:0:0:0:0:1".equals(remoteAddr); // IPv6 로컬 주소
+                            }
+                        }).permitAll()
                         .requestMatchers("/playGround/**").authenticated()  // playGround 경로는 인증된 사용자만 접근 가능
                         .requestMatchers("/index.html").authenticated()  // index.html에도 인증 요구
                         .anyRequest().permitAll()  // 나머지 요청은 모두 허용

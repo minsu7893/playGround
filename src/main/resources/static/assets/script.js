@@ -38,3 +38,86 @@ document.getElementById("sshIcon").addEventListener("click", function () {
             console.error("Error:", error);
         });
 });
+
+
+document.getElementById("startKtxMacro").addEventListener("click", function () {
+    // 사용자가 입력한 값을 가져옵니다.
+    const startStation = document.getElementById("startStation").value;
+    const endStation = document.getElementById("endStation").value;
+    const customDate = document.getElementById("customDate").value;
+    const departureTime = document.getElementById("departureTime").value;
+
+    // 날짜에서 연도, 월, 일 추출
+    const date = new Date(customDate);
+    const year = date.getFullYear(); // 숫자로 유지
+    const month = date.getMonth() + 1; // 숫자로 유지, 월은 0부터 시작하므로 +1
+    const day = date.getDate(); // 숫자로 유지
+
+    // 요일 추출
+    const dayOfWeekArr = ["일", "월", "화", "수", "목", "금", "토"];
+    const dayOfWeek = dayOfWeekArr[date.getDay()];
+
+    // KtxRequest 객체 생성
+    const ktxRequest = {
+        start: startStation,
+        end: endStation,
+        year: year,
+        month: month,
+        day: day,
+        dayOfWeek: dayOfWeek,
+        time: departureTime
+    };
+
+    // POST 요청 보내기
+    fetch('/api/start-ktx', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(ktxRequest)
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then((text) => {
+                    throw new Error(data.prcsRslt);
+                });
+            }
+            return response.json(); // JSON으로 응답을 파싱
+        })
+        .then(data => {
+            console.log("서버 응답:", data);
+            alert(data.prcsRslt); // prcsRslt 필드를 출력
+        })
+        .catch(error => {
+            console.error("에러 발생:", error);
+            alert(`에러 발생: ${error.message}`); // 에러 메시지 표시
+        });
+
+});
+
+document.getElementById("stopKtxMacro").addEventListener("click", function () {
+
+    // POST 요청 보내기
+    fetch('/stop-ktx', {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                return response.text().then((text) => {
+                    throw new Error(`오류 코드: ${response.status}, 메시지: ${text}`);
+                });
+            }
+            return response.text();
+        })
+        .then(data => {
+            console.log("서버 응답:", data);
+            alert("KTX 매크로가 성공적으로 시작되었습니다.");
+        })
+        .catch(error => {
+            console.error("에러 발생:", error);
+            alert(`${error.message}`);
+        });
+});
